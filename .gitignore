@@ -1,4 +1,5 @@
 .env
+.codex
 credentials.json
 token.json
 .venv/
