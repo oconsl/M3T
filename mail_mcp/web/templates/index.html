@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mail MCP</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Mail MCP</h1>
+      <div class="muted">Templates, recipients, preview y envio manual</div>
+    </div>
+    <div class="toolbar">
+      <span id="gmailStatus" class="notice">Gmail: revisando...</span>
+      <button id="connectBtn">Conectar Gmail</button>
+      <button id="refreshBtn">Recargar</button>
+      <button id="dryRunBtn">Dry run</button>
+      <button id="sendBtn" class="primary">Enviar seleccionados</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel">
+      <h2>Templates</h2>
+      <div class="toolbar template-toolbar">
+        <button id="newTemplateBtn" class="primary">Nuevo</button>
+        <button id="duplicateTemplateBtn">Duplicar</button>
+        <button id="deleteTemplateBtn" class="danger">Borrar</button>
+      </div>
+      <div id="templateList" class="template-list"></div>
+      <hr>
+      <h2>Variables</h2>
+      <div id="variablesPanel"></div>
+    </aside>
+
+    <section>
+      <div class="tabs">
+        <button class="tab active" data-tab="templates">Editor</button>
+        <button class="tab" data-tab="recipients">Recipients</button>
+      </div>
+
+      <section id="templatesTab" class="panel">
+        <div id="templateMessages"></div>
+        <div class="split">
+          <form id="templateForm" class="editor">
+            <div class="grid-2">
+              <label>Template ID
+                <input id="templateIdInput" required pattern="[A-Za-z0-9_-]+">
+              </label>
+              <label>Subject
+                <input id="subjectInput" required>
+              </label>
+            </div>
+            <label>Cuerpo TXT
+              <textarea id="bodyTextInput" required></textarea>
+            </label>
+            <label>Cuerpo HTML
+              <textarea id="bodyHtmlInput"></textarea>
+            </label>
+            <div class="toolbar">
+              <button class="primary" type="submit">Guardar template</button>
+              <button type="button" id="previewBtn">Previsualizar</button>
+              <label class="preview-recipient">Recipient preview
+                <select id="previewRecipientSelect"></select>
+              </label>
+            </div>
+          </form>
+
+          <div class="editor">
+            <div>
+              <h2>Preview</h2>
+              <div id="previewWarnings"></div>
+            </div>
+            <label>Subject renderizado
+              <input id="previewSubject" readonly>
+            </label>
+            <label>Texto renderizado
+              <div id="previewText" class="preview-box"></div>
+            </label>
+            <label>HTML renderizado
+              <iframe id="previewHtml" class="preview-box" sandbox=""></iframe>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section id="recipientsTab" class="panel hidden">
+        <div class="toolbar recipients-toolbar">
+          <div class="toolbar">
+            <button id="addRecipientBtn" class="primary">Agregar fila</button>
+            <button id="addColumnBtn">Agregar columna</button>
+            <button id="saveRecipientsBtn">Guardar recipients</button>
+          </div>
+          <label class="recipient-search">Buscar
+            <input id="recipientSearch" placeholder="email, nombre, template...">
+          </label>
+        </div>
+        <div id="recipientMessages"></div>
+        <div class="table-wrap">
+          <table>
+            <thead id="recipientsHead"></thead>
+            <tbody id="recipientsBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/templates-view.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/recipients-view.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/preview-view.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/mail-actions.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/state.js') }}"></script>
+</body>
+</html>
