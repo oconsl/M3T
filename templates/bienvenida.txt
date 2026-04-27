@@ -1,0 +1,8 @@
+Hola {first_name},
+
+Te escribo de parte de {from_name}.
+
+{custom_note}
+
+Saludos,
+{from_name}

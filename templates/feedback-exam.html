@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f4f4; /* Fondo de pantalla neutro */
+            color: #333333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #e0eadd;
+            
+            /* Degradado sutil de fondo en verdes pasteles */
+            background: #ffffff; /* Fallback para correos antiguos */
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9f1 50%, #e6f4ea 100%);
+            
+            /* Eliminamos la sombra para que sea más limpio */
+            box-shadow: none;
+        }
+        .content {
+            font-size: 16px;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            font-size: 14px;
+            color: #666666;
+        }
+        .signature {
+            font-weight: bold;
+            color: #2c3e2d; /* Verde muy oscuro para el nombre */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <p>Hola <strong>{first_name}</strong>,</p>
+            
+            <p>Acá te comparto el feedback de tu examen de nivelación.</p>
+            
+            <p>Revisalo con calma. Te dejé anotados los puntos fuertes y los aspectos a mejorar para que arranquemos el curso con una buena base.</p>
+            
+            <p>Cualquier duda que te quede con las correcciones, te podés comunicar con nosotros y lo vemos.</p>
+        </div>
+        
+        <div class="footer">
+            <p>Saludos,<br>
+            <span class="signature">Santiago</span></p>
+        </div>
+    </div>
+</body>
+</html>

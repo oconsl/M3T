@@ -1,0 +1,8 @@
+Hola {first_name},
+
+Queria compartirte feedback sobre tu examen.
+
+{custom_note}
+
+Saludos,
+{from_name}

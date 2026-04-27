@@ -1,0 +1,5 @@
+send,email,first_name,last_name,company,template_id,message_format,attachment_paths,custom_note
+no,persona1@example.com,Ana,Gomez,Empresa Demo,bienvenida,html,,Gracias por tu interes.
+no,persona2@example.com,Carlos,Perez,Otra Empresa,bienvenida,html,,
+yes,santiago.example@example.com,Santiago,Ocon,,feedback-exam,plain,,
+yes,gabriel.example@example.com,Gabriel,Gonzalez,,feedback-exam,html,,

@@ -1,0 +1,9 @@
+.env
+credentials.json
+token.json
+.venv/
+backups/
+__pycache__/
+*.pyc
+attachments/*
+!attachments/.gitkeep
