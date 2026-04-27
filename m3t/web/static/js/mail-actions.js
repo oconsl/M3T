@@ -16,9 +16,13 @@ window.dryRun = async function dryRun() {
       body: JSON.stringify(ids.length ? { recipient_ids: ids } : { indexes: selectedIndexes() }),
     });
     const lines = data.emails.map(email => `${email.to} | ${email.message_format} | ${email.subject}`);
-    alert(lines.length ? `Dry run:\n${lines.join("\n")}` : "No hay emails seleccionados.");
+    if (lines.length) {
+      notify.info("Dry run listo", { description: lines.join("\n"), duration: Infinity });
+    } else {
+      notify.warning("No hay emails seleccionados.");
+    }
   } catch (error) {
-    alert(error.message);
+    notify.error(error.message);
   }
 };
 
@@ -26,7 +30,7 @@ window.sendSelected = async function sendSelected() {
   const ids = selectedRecipientIds();
   const indexes = selectedIndexes();
   if (!ids.length && !indexes.length) {
-    alert("Selecciona al menos un recipient.");
+    notify.warning("Selecciona al menos un recipient.");
     return;
   }
   const confirmation = prompt(`Se enviaran ${ids.length || indexes.length} email(s). Escribe SEND para confirmar.`);
@@ -36,9 +40,9 @@ window.sendSelected = async function sendSelected() {
       method: "POST",
       body: JSON.stringify(ids.length ? { recipient_ids: ids, confirm: confirmation } : { indexes, confirm: confirmation }),
     });
-    alert(`Enviados: ${data.sent}`);
+    notify.success(`Enviados: ${data.sent}`);
   } catch (error) {
-    alert(error.message);
+    notify.error(error.message);
   }
 };
 
@@ -48,10 +52,10 @@ window.connectGmail = async function connectGmail() {
   $("connectBtn").textContent = "Conectando...";
   try {
     const data = await api("/api/auth", { method: "POST", body: JSON.stringify({}) });
-    alert(`Gmail conectado: ${data.email}`);
+    notify.success(`Gmail conectado: ${data.email}`);
     await loadConfig();
   } catch (error) {
-    alert(error.message);
+    notify.error(error.message);
   } finally {
     $("connectBtn").disabled = false;
     $("connectBtn").textContent = "Conectar Gmail";

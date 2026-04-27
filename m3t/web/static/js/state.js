@@ -45,4 +45,4 @@ function wireEvents() {
 }
 
 wireEvents();
-loadState().then(previewSelected).catch(error => alert(error.message));
+loadState().then(previewSelected).catch(error => notify.error(error.message));

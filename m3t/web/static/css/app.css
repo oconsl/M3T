@@ -180,6 +180,70 @@ td input, td select { min-width: 130px; }
 
 .hidden { display: none !important; }
 
+.toast-region {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  display: grid;
+  gap: 10px;
+  width: min(380px, calc(100vw - 32px));
+}
+
+.toast {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 12px 38px 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 16px 42px rgba(23, 32, 51, .16);
+  animation: toast-in .18s ease-out;
+}
+
+.toast strong {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.toast p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.toast-success { border-color: #abefc6; }
+.toast-error { border-color: #f1b8b2; }
+.toast-warning { border-color: #fedf89; }
+.toast-info { border-color: #b2ddff; }
+
+.toast-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+}
+
+.toast-hiding {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (max-width: 1000px) {
   .layout, .split, .grid-2, .grid-3 { grid-template-columns: 1fr; }
   header { position: static; align-items: flex-start; flex-direction: column; }
