@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from mail_mcp.config import TEMPLATE_COLUMNS
-from mail_mcp.domain import Template
-from mail_mcp.repositories.csv_store import make_backup
-from mail_mcp.repositories.template_store import (
+from m3t.config import TEMPLATE_COLUMNS
+from m3t.domain import Template
+from m3t.repositories.csv_store import make_backup
+from m3t.repositories.template_store import (
     default_template_paths,
     delete_template_files,
     list_templates,
@@ -11,7 +11,7 @@ from mail_mcp.repositories.template_store import (
     template_map,
     write_template_index,
 )
-from mail_mcp.services.formatting import TEMPLATE_ID_RE
+from m3t.services.formatting import TEMPLATE_ID_RE
 
 
 class TemplateService:

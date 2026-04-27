@@ -2,8 +2,8 @@
 import argparse
 from pathlib import Path
 
-from mail_mcp.config import ROOT
-from mail_mcp.services.mailer import (
+from m3t.config import ROOT
+from m3t.services.mailer import (
     GmailConfig,
     attach_files,
     authenticated_email,
@@ -22,7 +22,7 @@ from mail_mcp.services.mailer import (
     should_send,
     wants_html,
 )
-from mail_mcp.services.formatting import format_with_values as format_template
+from m3t.services.formatting import format_with_values as format_template
 
 
 def main() -> None:

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 
-from mail_mcp.config import CREDENTIALS_FILE, TOKEN_FILE
-from mail_mcp.services.mailer import authenticated_email, authorize, gmail_service
+from m3t.config import CREDENTIALS_FILE, TOKEN_FILE
+from m3t.services.mailer import authenticated_email, authorize, gmail_service
 
 
 bp = Blueprint("api_config", __name__)

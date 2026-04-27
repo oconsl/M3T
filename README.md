@@ -1,6 +1,8 @@
-# Automatizacion de emails con Gmail
+# M3T
 
-Este proyecto lee destinatarios desde `recipients.csv`, toma el asunto y los cuerpos desde `messages.csv` y envia los correos con Gmail API usando OAuth y `credentials.json`.
+Mail Template Together Tool.
+
+M3T lee destinatarios desde `recipients.csv`, toma el asunto y los cuerpos desde `messages.csv` y envia correos con Gmail API usando OAuth y `credentials.json`.
 
 ## Archivos
 
@@ -12,7 +14,7 @@ Este proyecto lee destinatarios desde `recipients.csv`, toma el asunto y los cue
 - `token.json`: token local creado al conectar Gmail. No se sube a Git.
 - `.env.example`: ejemplo de configuracion opcional.
 - `send_emails.py`: script de envio.
-- `mail_mcp/`: aplicacion Flask modular con rutas, servicios, repositorios y assets web.
+- `m3t/`: aplicacion Flask modular con rutas, servicios, repositorios y assets web.
 
 ## Configurar Gmail
 
@@ -78,7 +80,7 @@ Tambien puedes conectar Gmail desde el boton `Conectar Gmail`. El envio real req
 
 Antes de guardar cambios desde la web, la app crea una copia en `backups/YYYYMMDD-HHMMSS/`.
 
-La interfaz web esta separada en `mail_mcp/web/templates/index.html`, `mail_mcp/web/static/css/app.css` y modulos JavaScript en `mail_mcp/web/static/js/`. El backend expone los mismos endpoints `/api/...`, pero la logica vive en servicios y repositorios testeables.
+La interfaz web esta separada en `m3t/web/templates/index.html`, `m3t/web/static/css/app.css` y modulos JavaScript en `m3t/web/static/js/`. El backend expone los mismos endpoints `/api/...`, pero la logica vive en servicios y repositorios testeables.
 
 ## Verificar
 

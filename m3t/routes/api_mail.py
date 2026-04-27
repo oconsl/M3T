@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 
-from mail_mcp.services.mailer import MailService, parse_selection
+from m3t.services.mailer import MailService, parse_selection
 
 
 bp = Blueprint("api_mail", __name__)

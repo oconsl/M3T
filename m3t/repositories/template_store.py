@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from mail_mcp.config import MESSAGES_CSV, TEMPLATE_COLUMNS, TEMPLATES_DIR
-from mail_mcp.domain import Template
-from mail_mcp.repositories.csv_store import read_csv_rows, write_csv_rows
-from mail_mcp.services.formatting import extract_variables
+from m3t.config import MESSAGES_CSV, TEMPLATE_COLUMNS, TEMPLATES_DIR
+from m3t.domain import Template
+from m3t.repositories.csv_store import read_csv_rows, write_csv_rows
+from m3t.services.formatting import extract_variables
 
 
 def safe_template_path(relative_path: str, suffix: str | None = None) -> Path:

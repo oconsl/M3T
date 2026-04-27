@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from mail_mcp import create_app
+from m3t import create_app
 
 
 app = create_app()

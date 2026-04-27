@@ -12,12 +12,12 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-from mail_mcp.config import CREDENTIALS_FILE, HTML_FORMATS, RECIPIENTS_CSV, ROOT, SCOPES, TOKEN_FILE
-from mail_mcp.domain import GmailConfig
-from mail_mcp.repositories.recipient_store import list_recipients
-from mail_mcp.repositories.template_store import safe_template_path
-from mail_mcp.services.formatting import SafeDict, format_with_values, should_send
-from mail_mcp.services.recipients import safe_attachment_path
+from m3t.config import CREDENTIALS_FILE, HTML_FORMATS, RECIPIENTS_CSV, ROOT, SCOPES, TOKEN_FILE
+from m3t.domain import GmailConfig
+from m3t.repositories.recipient_store import list_recipients
+from m3t.repositories.template_store import safe_template_path
+from m3t.services.formatting import SafeDict, format_with_values, should_send
+from m3t.services.recipients import safe_attachment_path
 
 
 def load_dotenv(path: Path) -> None:

@@ -1,8 +1,8 @@
 import unittest
 
-from mail_mcp import create_app
-from mail_mcp.services.formatting import extract_variables, normalize_message_format, normalize_send
-from mail_mcp.services.recipients import safe_attachment_path
+from m3t import create_app
+from m3t.services.formatting import extract_variables, normalize_message_format, normalize_send
+from m3t.services.recipients import safe_attachment_path
 
 
 class ServiceTests(unittest.TestCase):

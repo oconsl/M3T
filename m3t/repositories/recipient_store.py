@@ -3,10 +3,10 @@ from __future__ import annotations
 import hashlib
 import uuid
 
-from mail_mcp.config import RECIPIENT_ID_COLUMN, RECIPIENTS_CSV, STANDARD_RECIPIENT_COLUMNS
-from mail_mcp.domain import RecipientSet
-from mail_mcp.repositories.csv_store import merge_columns, read_csv_rows, write_csv_rows
-from mail_mcp.services.formatting import normalize_message_format, normalize_send
+from m3t.config import RECIPIENT_ID_COLUMN, RECIPIENTS_CSV, STANDARD_RECIPIENT_COLUMNS
+from m3t.domain import RecipientSet
+from m3t.repositories.csv_store import merge_columns, read_csv_rows, write_csv_rows
+from m3t.services.formatting import normalize_message_format, normalize_send
 
 
 def _fallback_recipient_id(row: dict[str, str], index: int) -> str:

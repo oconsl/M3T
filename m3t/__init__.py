@@ -1,6 +1,6 @@
 from flask import Flask
 
-from mail_mcp.routes import api_config, api_mail, api_preview, api_recipients, api_templates, pages
+from m3t.routes import api_config, api_mail, api_preview, api_recipients, api_templates, pages
 
 
 def create_app() -> Flask:

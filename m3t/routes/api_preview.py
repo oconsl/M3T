@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 
-from mail_mcp.services.preview import PreviewService
-from mail_mcp.services.recipients import RecipientService
-from mail_mcp.services.templates import TemplateService
+from m3t.services.preview import PreviewService
+from m3t.services.recipients import RecipientService
+from m3t.services.templates import TemplateService
 
 
 bp = Blueprint("api_preview", __name__)

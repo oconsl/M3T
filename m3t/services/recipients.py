@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mail_mcp.config import ATTACHMENTS_DIR
-from mail_mcp.domain import RecipientSet, Template
-from mail_mcp.repositories.csv_store import make_backup, merge_columns
-from mail_mcp.repositories.recipient_store import list_recipients, save_recipients
-from mail_mcp.services.formatting import EMAIL_RE, normalize_message_format, normalize_send
+from m3t.config import ATTACHMENTS_DIR
+from m3t.domain import RecipientSet, Template
+from m3t.repositories.csv_store import make_backup, merge_columns
+from m3t.repositories.recipient_store import list_recipients, save_recipients
+from m3t.services.formatting import EMAIL_RE, normalize_message_format, normalize_send
 
 
 class RecipientService:

@@ -1,6 +1,6 @@
 import re
 
-from mail_mcp.config import MESSAGE_FORMATS, SEND_TRUE
+from m3t.config import MESSAGE_FORMATS, SEND_TRUE
 
 
 TEMPLATE_ID_RE = re.compile(r"^[A-Za-z0-9_-]+$")

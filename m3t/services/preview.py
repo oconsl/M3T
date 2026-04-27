@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from mail_mcp.domain import MailPreview, Template
-from mail_mcp.services.formatting import extract_variables, format_with_values, normalize_message_format
-from mail_mcp.services.mailer import preview_config
+from m3t.domain import MailPreview, Template
+from m3t.services.formatting import extract_variables, format_with_values, normalize_message_format
+from m3t.services.mailer import preview_config
 
 
 class PreviewService:

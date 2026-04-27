@@ -5,7 +5,7 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-from mail_mcp.config import BACKUPS_DIR, MESSAGES_CSV, RECIPIENTS_CSV, TEMPLATES_DIR
+from m3t.config import BACKUPS_DIR, MESSAGES_CSV, RECIPIENTS_CSV, TEMPLATES_DIR
 
 
 def merge_columns(base: list[str], discovered: list[str]) -> list[str]:
