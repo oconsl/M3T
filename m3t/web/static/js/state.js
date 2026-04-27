@@ -32,6 +32,7 @@ function wireEvents() {
   $("deleteTemplateBtn").addEventListener("click", deleteTemplate);
   $("addRecipientBtn").addEventListener("click", addRecipient);
   $("addColumnBtn").addEventListener("click", addColumn);
+  $("toggleAllRecipientsBtn").addEventListener("click", toggleAllRecipients);
   $("saveRecipientsBtn").addEventListener("click", saveRecipients);
   $("recipientSearch").addEventListener("input", renderRecipients);
   document.querySelectorAll(".tab").forEach(tab => {

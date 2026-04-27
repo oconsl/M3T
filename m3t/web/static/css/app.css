@@ -166,6 +166,66 @@ th {
 }
 
 td input, td select { min-width: 130px; }
+.recipient-use-column,
+.recipient-use-cell {
+  width: 58px;
+  min-width: 58px;
+  text-align: center;
+}
+
+.recipient-toggle {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.recipient-toggle:hover,
+.recipient-toggle:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(17, 100, 102, .12);
+}
+
+.recipient-toggle input {
+  position: absolute;
+  inset: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.recipient-toggle-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--muted);
+  border-radius: 4px;
+}
+
+.recipient-toggle.is-selected {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.recipient-toggle.is-selected .recipient-toggle-icon {
+  width: 10px;
+  height: 17px;
+  border-top: 0;
+  border-left: 0;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+  border-radius: 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
 .table-wrap { overflow: auto; max-height: calc(100vh - 220px); border: 1px solid var(--line); border-radius: 8px; }
 
 .pill {

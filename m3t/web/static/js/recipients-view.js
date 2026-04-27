@@ -6,14 +6,20 @@ window.renderPreviewRecipientSelect = function renderPreviewRecipientSelect() {
 
 window.renderRecipients = function renderRecipients() {
   const query = $("recipientSearch").value.trim().toLowerCase();
-  $("recipientsHead").innerHTML = `<tr><th>Usar</th>${state.recipientColumns.map(column => `<th>${escapeHtml(column)}</th>`).join("")}<th>Estado</th><th></th></tr>`;
+  $("recipientsHead").innerHTML = `<tr><th class="recipient-use-column">Usar</th>${state.recipientColumns.map(column => `<th>${escapeHtml(column)}</th>`).join("")}<th>Estado</th><th></th></tr>`;
   $("recipientsBody").innerHTML = state.recipients.map((row, index) => {
     const blob = Object.values(row).join(" ").toLowerCase();
     if (query && !blob.includes(query)) return "";
     const errors = state.recipientErrors[index] || [];
+    const isSelected = row.send === "yes";
     return `
       <tr data-index="${index}">
-        <td><input type="checkbox" class="recipient-selected" data-index="${index}" data-recipient-id="${escapeHtml(row.recipient_id || "")}" ${row.send === "yes" ? "checked" : ""}></td>
+        <td class="recipient-use-cell">
+          <label class="recipient-toggle ${isSelected ? "is-selected" : ""}" title="${isSelected ? "Desmarcar recipient" : "Marcar recipient"}" aria-label="${isSelected ? "Desmarcar recipient" : "Marcar recipient"}">
+            <input type="checkbox" class="recipient-selected" data-index="${index}" data-recipient-id="${escapeHtml(row.recipient_id || "")}" ${isSelected ? "checked" : ""}>
+            <span class="recipient-toggle-icon" aria-hidden="true"></span>
+          </label>
+        </td>
         ${state.recipientColumns.map(column => `<td>${recipientCell(column, row[column] || "", index)}</td>`).join("")}
         <td>${errors.length ? `<div class="notice error">${errors.map(escapeHtml).join("<br>")}</div>` : `<span class="notice ok">OK</span>`}</td>
         <td><button class="danger delete-recipient" data-index="${index}">Borrar</button></td>
@@ -41,6 +47,24 @@ window.renderRecipients = function renderRecipients() {
       renderRecipients();
     });
   });
+  updateToggleAllRecipientsButton();
+};
+
+window.toggleAllRecipients = function toggleAllRecipients() {
+  const shouldSelect = !state.recipients.length || state.recipients.some(row => row.send !== "yes");
+  state.recipients.forEach(row => {
+    row.send = shouldSelect ? "yes" : "no";
+  });
+  renderRecipients();
+};
+
+window.updateToggleAllRecipientsButton = function updateToggleAllRecipientsButton() {
+  const button = $("toggleAllRecipientsBtn");
+  if (!button) return;
+  const hasRecipients = state.recipients.length > 0;
+  const allSelected = hasRecipients && state.recipients.every(row => row.send === "yes");
+  button.textContent = allSelected ? "Desmarcar todos" : "Marcar todos";
+  button.disabled = !hasRecipients;
 };
 
 window.recipientCell = function recipientCell(column, value, index) {
