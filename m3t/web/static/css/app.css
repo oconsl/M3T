@@ -21,6 +21,8 @@ body {
   color: var(--ink);
 }
 
+body.modal-open { overflow: hidden; }
+
 header {
   display: flex;
   align-items: center;
@@ -179,6 +181,63 @@ td input, td select { min-width: 130px; }
 }
 
 .hidden { display: none !important; }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(23, 32, 51, .44);
+}
+
+.modal {
+  width: min(460px, 100%);
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 24px 60px rgba(23, 32, 51, .26);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modal-header h2 { margin: 0; }
+
+.modal-copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.modal-error {
+  min-height: 18px;
+  color: var(--danger);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.modal-close {
+  width: 30px;
+  min-height: 30px;
+  padding: 0;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+}
 
 .toast-region {
   position: fixed;

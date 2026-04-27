@@ -108,6 +108,24 @@
     </section>
   </main>
 
+  <div id="sendConfirmModal" class="modal-backdrop hidden" role="presentation">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="sendConfirmTitle" aria-describedby="sendConfirmDescription">
+      <div class="modal-header">
+        <h2 id="sendConfirmTitle">Confirmar envio</h2>
+        <button id="sendConfirmCloseBtn" class="modal-close" type="button" aria-label="Cerrar">x</button>
+      </div>
+      <p id="sendConfirmDescription" class="modal-copy"></p>
+      <label>Escribe SEND para confirmar
+        <input id="sendConfirmInput" autocomplete="off" spellcheck="false">
+      </label>
+      <div id="sendConfirmError" class="muted modal-error"></div>
+      <div class="modal-actions">
+        <button id="sendConfirmCancelBtn" type="button">Cancelar</button>
+        <button id="sendConfirmSubmitBtn" class="primary" type="button" disabled>Enviar</button>
+      </div>
+    </section>
+  </div>
+
   <script src="{{ url_for('static', filename='js/api.js') }}"></script>
   <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
   <script src="{{ url_for('static', filename='js/templates-view.js') }}"></script>

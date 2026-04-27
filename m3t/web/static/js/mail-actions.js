@@ -33,7 +33,7 @@ window.sendSelected = async function sendSelected() {
     notify.warning("Selecciona al menos un recipient.");
     return;
   }
-  const confirmation = prompt(`Se enviaran ${ids.length || indexes.length} email(s). Escribe SEND para confirmar.`);
+  const confirmation = await confirmSend(ids.length || indexes.length);
   if (confirmation !== "SEND") return;
   try {
     const data = await api("/api/send", {
@@ -44,6 +44,82 @@ window.sendSelected = async function sendSelected() {
   } catch (error) {
     notify.error(error.message);
   }
+};
+
+window.confirmSend = function confirmSend(count) {
+  const modal = $("sendConfirmModal");
+  const input = $("sendConfirmInput");
+  const submit = $("sendConfirmSubmitBtn");
+  const cancel = $("sendConfirmCancelBtn");
+  const close = $("sendConfirmCloseBtn");
+  const description = $("sendConfirmDescription");
+  const error = $("sendConfirmError");
+  const previousFocus = document.activeElement;
+
+  return new Promise((resolve) => {
+    function setOpen(isOpen) {
+      modal.classList.toggle("hidden", !isOpen);
+      document.body.classList.toggle("modal-open", isOpen);
+    }
+
+    function cleanup(value = null) {
+      setOpen(false);
+      input.value = "";
+      submit.disabled = true;
+      error.textContent = "";
+      input.removeEventListener("input", handleInput);
+      input.removeEventListener("keydown", handleInputKeydown);
+      submit.removeEventListener("click", handleSubmit);
+      cancel.removeEventListener("click", handleCancel);
+      close.removeEventListener("click", handleCancel);
+      modal.removeEventListener("click", handleBackdrop);
+      document.removeEventListener("keydown", handleDocumentKeydown);
+      if (previousFocus && previousFocus.focus) previousFocus.focus();
+      resolve(value);
+    }
+
+    function handleInput() {
+      const isConfirmed = input.value === "SEND";
+      submit.disabled = !isConfirmed;
+      error.textContent = input.value && !isConfirmed ? "La confirmacion debe coincidir exactamente con SEND." : "";
+    }
+
+    function handleInputKeydown(event) {
+      if (event.key === "Enter" && input.value === "SEND") {
+        event.preventDefault();
+        cleanup("SEND");
+      }
+    }
+
+    function handleSubmit() {
+      if (input.value === "SEND") cleanup("SEND");
+    }
+
+    function handleCancel() {
+      cleanup(null);
+    }
+
+    function handleBackdrop(event) {
+      if (event.target === modal) cleanup(null);
+    }
+
+    function handleDocumentKeydown(event) {
+      if (event.key === "Escape") {
+        cleanup(null);
+      }
+    }
+
+    description.textContent = `Se enviaran ${count} email(s). Esta accion usa Gmail y no se puede deshacer desde M3T.`;
+    input.addEventListener("input", handleInput);
+    input.addEventListener("keydown", handleInputKeydown);
+    submit.addEventListener("click", handleSubmit);
+    cancel.addEventListener("click", handleCancel);
+    close.addEventListener("click", handleCancel);
+    modal.addEventListener("click", handleBackdrop);
+    document.addEventListener("keydown", handleDocumentKeydown);
+    setOpen(true);
+    input.focus();
+  });
 };
 
 window.connectGmail = async function connectGmail() {
