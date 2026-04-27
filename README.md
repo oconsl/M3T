@@ -36,12 +36,14 @@ python3 -m venv .venv
 
 Ese comando abre el flujo de Google, pide permiso para enviar emails y guarda `token.json` para futuros envios.
 
-Opcionalmente copia `.env.example` como `.env` para personalizar el nombre visible del remitente y `Reply-To`:
+Opcionalmente copia `.env.example` como `.env` para personalizar el nombre visible del remitente, `Reply-To` y el delay entre envios:
 
 
 ```bash
 cp .env.example .env
 ```
+
+Por defecto la app espera `2` segundos entre cada email enviado. Puedes ajustar ese valor con `MAIL_SEND_DELAY_SECONDS` en `.env`.
 
 ## Probar antes de enviar
 

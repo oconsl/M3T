@@ -4,8 +4,10 @@ import base64
 import csv
 import mimetypes
 import os
+import time
 from email.message import EmailMessage
 from pathlib import Path
+from typing import Callable
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -18,6 +20,8 @@ from m3t.repositories.recipient_store import list_recipients
 from m3t.repositories.template_store import safe_template_path
 from m3t.services.formatting import SafeDict, format_with_values, should_send
 from m3t.services.recipients import safe_attachment_path
+
+DEFAULT_MAIL_SEND_DELAY_SECONDS = 2.0
 
 
 def load_dotenv(path: Path) -> None:
@@ -169,12 +173,29 @@ def encode_message(message: EmailMessage) -> dict[str, str]:
     return {"raw": raw}
 
 
-def send_messages(messages: list[EmailMessage], service=None) -> list[dict]:
+def mail_send_delay_seconds() -> float:
+    load_dotenv(ROOT / ".env")
+    raw_delay = os.environ.get("MAIL_SEND_DELAY_SECONDS", str(DEFAULT_MAIL_SEND_DELAY_SECONDS))
+    try:
+        return max(0.0, float(raw_delay))
+    except ValueError:
+        return DEFAULT_MAIL_SEND_DELAY_SECONDS
+
+
+def send_messages(
+    messages: list[EmailMessage],
+    service=None,
+    delay_seconds: float | None = None,
+    sleeper: Callable[[float], None] = time.sleep,
+) -> list[dict]:
     service = service or gmail_service(interactive=False)
+    delay = mail_send_delay_seconds() if delay_seconds is None else max(0.0, delay_seconds)
     sent = []
-    for message in messages:
+    for index, message in enumerate(messages):
         result = service.users().messages().send(userId="me", body=encode_message(message)).execute()
         sent.append(result)
+        if delay and index < len(messages) - 1:
+            sleeper(delay)
     return sent
 
 

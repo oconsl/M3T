@@ -1,8 +1,28 @@
 import unittest
+from email.message import EmailMessage
 
 from m3t import create_app
+from m3t.services.mailer import send_messages
 from m3t.services.formatting import extract_variables, normalize_message_format, normalize_send
 from m3t.services.recipients import safe_attachment_path
+
+
+class FakeGmailService:
+    def __init__(self):
+        self.sent_bodies = []
+
+    def users(self):
+        return self
+
+    def messages(self):
+        return self
+
+    def send(self, userId, body):
+        self.sent_bodies.append((userId, body))
+        return self
+
+    def execute(self):
+        return {"id": f"message-{len(self.sent_bodies)}"}
 
 
 class ServiceTests(unittest.TestCase):
@@ -43,6 +63,27 @@ class ServiceTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.get_json()["errors"], ["Confirmacion requerida."])
+
+    def test_send_messages_waits_between_emails(self):
+        messages = []
+        for recipient in ("one@example.test", "two@example.test", "three@example.test"):
+            message = EmailMessage()
+            message["To"] = recipient
+            message["From"] = "sender@example.com"
+            message["Subject"] = "Test"
+            message.set_content("Body")
+            messages.append(message)
+
+        sleeps = []
+        results = send_messages(
+            messages,
+            service=FakeGmailService(),
+            delay_seconds=1.5,
+            sleeper=sleeps.append,
+        )
+
+        self.assertEqual([result["id"] for result in results], ["message-1", "message-2", "message-3"])
+        self.assertEqual(sleeps, [1.5, 1.5])
 
     def test_home_serves_static_template_links(self):
         app = create_app()
