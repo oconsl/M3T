@@ -1,0 +1,15 @@
+dynamic_key,value,enabled
+saludo,Hola,yes
+saludo,Estimado/a,yes
+saludo,Qué tal,yes
+saludo,Saludos,yes
+despedida,Quedo a tu disposición.,yes
+despedida,"Cualquier duda, me avisas por este medio.",yes
+despedida,Que tengas una excelente semana.,yes
+despedida,Saludos cordiales.,yes
+mensaje_adjunto,Adjunto tu documento correspondiente:,yes
+mensaje_adjunto,Te envío adjunto el archivo:,yes
+mensaje_adjunto,En este correo encontrarás tu documento:,yes
+pokemon,pikachu,yes
+pokemon,charmander,yes
+pokemon,mew-two,yes

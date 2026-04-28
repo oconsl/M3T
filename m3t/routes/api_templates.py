@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 
+from m3t.services.dynamic_values import DynamicValueService
 from m3t.services.recipients import RecipientService
 from m3t.services.templates import TemplateService
 
@@ -7,22 +8,35 @@ from m3t.services.templates import TemplateService
 bp = Blueprint("api_templates", __name__)
 template_service = TemplateService()
 recipient_service = RecipientService()
+dynamic_value_service = DynamicValueService()
 
 
 @bp.get("/api/state")
 def api_state():
     templates = template_service.list()
     recipient_set = recipient_service.list()
+    dynamic_value_set = dynamic_value_service.list()
     template_lookup = {template.template_id: template for template in templates}
     recipient_errors = recipient_service.validate_all(recipient_set.rows, template_lookup)
+    dynamic_errors = dynamic_value_service.validate_all(dynamic_value_set.rows)
     variables = sorted({column for column in recipient_set.columns} | {"from_name"})
+    dynamic_variables = sorted(
+        {
+            row.get("dynamic_key", "").strip()
+            for row in dynamic_value_set.rows
+            if row.get("dynamic_key", "").strip()
+        }
+    )
     return jsonify(
         {
             "templates": [template.to_dict() for template in templates],
             "recipient_columns": recipient_set.columns,
             "recipients": recipient_set.rows,
             "recipient_errors": recipient_errors,
+            "dynamic_values": dynamic_value_set.rows,
+            "dynamic_errors": dynamic_errors,
             "variables": variables,
+            "dynamic_variables": dynamic_variables,
         }
     )
 

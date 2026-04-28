@@ -45,9 +45,9 @@
 <body>
     <div class="container">
         <div class="content">
-            <p>Hola <strong>{first_name}</strong>,</p>
+            <p>{dynamic.saludo} <strong>{first_name}</strong>,</p>
             
-            <p>Acá te comparto el feedback de tu examen de nivelación.</p>
+            <p>{dynamic.mensaje_adjunto}</p>
             
             <p>Revisalo con calma. Te dejé anotados los puntos fuertes y los aspectos a mejorar para que arranquemos el curso con una buena base.</p>
             
@@ -55,7 +55,7 @@
         </div>
         
         <div class="footer">
-            <p>Saludos,<br>
+            <p>{dynamic.despedida}<br>
             <span class="signature">Santiago</span></p>
         </div>
     </div>

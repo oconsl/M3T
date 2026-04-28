@@ -18,10 +18,11 @@ from m3t.config import CREDENTIALS_FILE, HTML_FORMATS, RECIPIENTS_CSV, ROOT, SCO
 from m3t.domain import GmailConfig
 from m3t.repositories.recipient_store import list_recipients
 from m3t.repositories.template_store import safe_template_path
-from m3t.services.formatting import SafeDict, format_with_values, should_send
+from m3t.services.dynamic_values import DynamicValueService
+from m3t.services.formatting import SafeDict, render_template_text, should_send
 from m3t.services.recipients import safe_attachment_path
 
-DEFAULT_MAIL_SEND_DELAY_SECONDS = 2.0
+DEFAULT_MAIL_SEND_DELAY_SECONDS = 10.0
 
 
 def load_dotenv(path: Path) -> None:
@@ -90,12 +91,16 @@ def build_email(
     recipient: dict[str, str],
     template: dict[str, str],
     config: GmailConfig,
+    dynamic_options: dict[str, list[str]] | None = None,
 ) -> EmailMessage:
     values = SafeDict({**recipient, **template, "from_name": config.from_name})
-    subject = format_with_values(template["subject"], values)
-    text = format_with_values(read_template(template["body_text_file"]), values)
+    dynamic_choices: dict[str, str] = {}
+    if dynamic_options is None:
+        dynamic_options = DynamicValueService().enabled_options()
+    subject = render_template_text(template["subject"], values, dynamic_options, dynamic_choices)
+    text = render_template_text(read_template(template["body_text_file"]), values, dynamic_options, dynamic_choices)
     html_file = template.get("body_html_file", "").strip()
-    html = format_with_values(read_template(html_file), values) if html_file else ""
+    html = render_template_text(read_template(html_file), values, dynamic_options, dynamic_choices) if html_file else ""
 
     message = EmailMessage()
     message["From"] = f"{config.from_name} <{config.user}>"
@@ -207,12 +212,13 @@ def authorize() -> GmailConfig:
 def build_messages(recipients_path: Path, messages_path: Path, config: GmailConfig) -> list[EmailMessage]:
     templates = load_messages(messages_path)
     recipients = [row for row in read_csv(recipients_path) if should_send(row)]
+    dynamic_options = DynamicValueService().enabled_options()
     emails = []
     for recipient in recipients:
         template_id = recipient.get("template_id", "").strip()
         if template_id not in templates:
             raise RuntimeError(f"Template no encontrado para {recipient.get('email')}: {template_id}")
-        emails.append(build_email(recipient, templates[template_id], config))
+        emails.append(build_email(recipient, templates[template_id], config, dynamic_options))
     return emails
 
 
@@ -238,6 +244,7 @@ class MailService:
     ) -> dict[str, object]:
         templates = load_messages(messages_path or (ROOT / "messages.csv"))
         config = preview_config()
+        dynamic_options = DynamicValueService().enabled_options()
         emails = []
         errors = []
         for recipient in self.selected_recipients(indexes=indexes, recipient_ids=recipient_ids):
@@ -246,7 +253,7 @@ class MailService:
                 errors.append(f"Template no encontrado para {recipient.get('email')}: {template_id}")
                 continue
             try:
-                email = build_email(recipient, templates[template_id], config)
+                email = build_email(recipient, templates[template_id], config, dynamic_options)
                 emails.append(
                     {
                         "to": email["To"],
@@ -269,12 +276,13 @@ class MailService:
         service = gmail_service(interactive=False)
         config = load_config(authenticated_email())
         templates = load_messages(ROOT / "messages.csv")
+        dynamic_options = DynamicValueService().enabled_options()
         emails = []
         for recipient in self.selected_recipients(indexes=indexes, recipient_ids=recipient_ids):
             template_id = recipient.get("template_id", "").strip()
             if template_id not in templates:
                 return False, {"ok": False, "errors": [f"Template no encontrado: {template_id}"]}, 400
-            emails.append(build_email(recipient, templates[template_id], config))
+            emails.append(build_email(recipient, templates[template_id], config, dynamic_options))
         send_messages(emails, service=service)
         return True, {"ok": True, "sent": len(emails)}, 200
 

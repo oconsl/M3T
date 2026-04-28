@@ -43,7 +43,7 @@ Opcionalmente copia `.env.example` como `.env` para personalizar el nombre visib
 cp .env.example .env
 ```
 
-Por defecto la app espera `2` segundos entre cada email enviado. Puedes ajustar ese valor con `MAIL_SEND_DELAY_SECONDS` en `.env`.
+Por defecto la app espera `10` segundos entre cada email enviado. Puedes ajustar ese valor con `MAIL_SEND_DELAY_SECONDS` en `.env`.
 
 ## Probar antes de enviar
 
@@ -94,6 +94,8 @@ La interfaz web esta separada en `m3t/web/templates/index.html`, `m3t/web/static
 ## Personalizar datos
 
 En `recipients.csv`, cualquier columna adicional puede usarse como variable dentro de los templates. Por ejemplo, `{first_name}`, `{company}` o `{custom_note}`.
+
+En `dynamic_values.csv`, cada fila define una variante reutilizable con `dynamic_key`, `value` y `enabled`. En los templates se usan como `{dynamic.saludo}` o `{dynamic.despedida}`; M3T elige una variante activa al renderizar cada correo. Tambien podés editarlas desde el tab `Dynamic Values`.
 
 Si quieres varios adjuntos para una persona, separalos con punto y coma en `attachment_paths`:
 

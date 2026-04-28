@@ -57,7 +57,7 @@ button.primary:hover { background: var(--accent-dark); }
 button.danger { border-color: #f1b8b2; color: var(--danger); }
 button:disabled { opacity: .55; cursor: not-allowed; }
 
-input, select, textarea {
+input, select, textarea:not(.inputarea) {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -66,7 +66,7 @@ input, select, textarea {
   color: var(--ink);
 }
 
-textarea {
+textarea:not(.inputarea) {
   min-height: 180px;
   resize: vertical;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -112,6 +112,117 @@ textarea {
 label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; }
 .editor { display: grid; gap: 12px; }
 .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, .9fr); gap: 14px; }
+
+.editor-panel {
+  min-height: calc(100vh - 128px);
+}
+
+.editor-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 14px;
+  align-items: start;
+}
+
+.template-editor-form {
+  min-width: 0;
+}
+
+.editor-topbar {
+  display: grid;
+  grid-template-columns: minmax(150px, 220px) minmax(220px, 1fr) minmax(180px, 260px);
+  gap: 12px;
+  align-items: end;
+}
+
+.editor-actions {
+  justify-content: flex-start;
+}
+
+.code-editor-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  min-height: calc(100vh - 330px);
+}
+
+.code-editor-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  min-height: 420px;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.monaco-editor-host {
+  display: none;
+  width: 100%;
+  min-height: 420px;
+  height: calc(100vh - 330px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.code-editor-field.is-monaco-ready > textarea {
+  display: none;
+}
+
+.code-editor-field.is-monaco-ready .monaco-editor-host {
+  display: block;
+}
+
+.editor-preview {
+  position: sticky;
+  top: 98px;
+  max-height: calc(100vh - 128px);
+  overflow: auto;
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+
+.preview-html-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.preview-html-header h2 {
+  margin: 0;
+}
+
+.preview-html-frame {
+  min-height: 0;
+}
+
+.editor-preview.is-html-expanded {
+  position: fixed;
+  inset: 18px;
+  z-index: 70;
+  display: grid;
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
+  max-height: none;
+  padding: 18px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 24px 60px rgba(23, 32, 51, .24);
+}
+
+.editor-preview.is-html-expanded #previewText {
+  max-height: 110px;
+}
+
+.editor-preview.is-html-expanded iframe.preview-box {
+  height: calc(100vh - 260px);
+  min-height: 360px;
+}
 
 .preview-box {
   border: 1px solid var(--line);
@@ -240,6 +351,15 @@ td input, td select { min-width: 130px; }
   margin: 2px;
 }
 
+.dynamic-pill {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.dynamic-value-text {
+  min-width: 360px;
+}
+
 .hidden { display: none !important; }
 
 .modal-backdrop {
@@ -302,11 +422,12 @@ td input, td select { min-width: 130px; }
 .toast-region {
   position: fixed;
   top: 16px;
-  right: 16px;
+  left: 50%;
   z-index: 100;
   display: grid;
   gap: 10px;
   width: min(380px, calc(100vw - 32px));
+  transform: translateX(-50%);
 }
 
 .toast {
@@ -364,7 +485,29 @@ td input, td select { min-width: 130px; }
 }
 
 @media (max-width: 1000px) {
-  .layout, .split, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .layout, .split, .grid-2, .grid-3, .editor-workspace, .editor-topbar, .code-editor-grid { grid-template-columns: 1fr; }
   header { position: static; align-items: flex-start; flex-direction: column; }
   th { top: 0; }
+  .editor-panel { min-height: auto; }
+  .code-editor-grid { min-height: auto; }
+  .code-editor-field { min-height: 320px; }
+  .monaco-editor-host { min-height: 320px; height: 48vh; }
+  .editor-preview {
+    position: static;
+    max-height: none;
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  .editor-preview.is-html-expanded {
+    position: fixed;
+    inset: 10px;
+    max-height: none;
+    padding: 12px;
+  }
+  .editor-preview.is-html-expanded iframe.preview-box {
+    height: calc(100vh - 260px);
+    min-height: 280px;
+  }
 }

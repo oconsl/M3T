@@ -4,6 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MESSAGES_CSV = ROOT / "messages.csv"
 RECIPIENTS_CSV = ROOT / "recipients.csv"
+DYNAMIC_VALUES_CSV = ROOT / "dynamic_values.csv"
 TEMPLATES_DIR = ROOT / "templates"
 ATTACHMENTS_DIR = ROOT / "attachments"
 BACKUPS_DIR = ROOT / "backups"
@@ -26,6 +27,7 @@ STANDARD_RECIPIENT_COLUMNS = [
 ]
 
 TEMPLATE_COLUMNS = ["template_id", "subject", "body_text_file", "body_html_file"]
+DYNAMIC_VALUE_COLUMNS = ["dynamic_key", "value", "enabled"]
 SEND_TRUE = {"yes", "si", "sí", "true", "1", "y"}
 MESSAGE_FORMATS = {"plain", "html"}
 HTML_FORMATS = {"html", "htm", "rich"}

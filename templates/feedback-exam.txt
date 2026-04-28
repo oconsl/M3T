@@ -1,8 +1,8 @@
-Hola {first_name},
+{dynamic.saludo} {first_name},
 
 Queria compartirte feedback sobre tu examen.
 
 {custom_note}
 
-Saludos,
+{dynamic.despedida}
 {from_name}

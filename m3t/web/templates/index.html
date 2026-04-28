@@ -39,36 +39,45 @@
       <div class="tabs">
         <button class="tab active" data-tab="templates">Editor</button>
         <button class="tab" data-tab="recipients">Recipients</button>
+        <button class="tab" data-tab="dynamicValues">Dynamic Values</button>
       </div>
 
-      <section id="templatesTab" class="panel">
+      <section id="templatesTab" class="panel editor-panel">
         <div id="templateMessages"></div>
-        <div class="split">
-          <form id="templateForm" class="editor">
-            <div class="grid-2">
+        <div class="editor-workspace">
+          <form id="templateForm" class="editor template-editor-form">
+            <div class="editor-topbar">
               <label>Template ID
                 <input id="templateIdInput" required pattern="[A-Za-z0-9_-]+">
               </label>
               <label>Subject
                 <input id="subjectInput" required>
               </label>
-            </div>
-            <label>Cuerpo TXT
-              <textarea id="bodyTextInput" required></textarea>
-            </label>
-            <label>Cuerpo HTML
-              <textarea id="bodyHtmlInput"></textarea>
-            </label>
-            <div class="toolbar">
-              <button class="primary" type="submit">Guardar template</button>
-              <button type="button" id="previewBtn">Previsualizar</button>
               <label class="preview-recipient">Recipient preview
                 <select id="previewRecipientSelect"></select>
               </label>
             </div>
+            <div class="toolbar editor-actions">
+              <button class="primary" type="submit">Guardar template</button>
+              <button type="button" id="previewBtn">Previsualizar</button>
+              <button type="button" id="formatHtmlBtn">Formatear HTML</button>
+            </div>
+
+            <div class="code-editor-grid">
+              <div class="code-editor-field">
+                <span class="field-label">Cuerpo TXT</span>
+                <textarea id="bodyTextInput" required></textarea>
+                <div id="bodyTextEditor" class="monaco-editor-host" aria-hidden="true"></div>
+              </div>
+              <div class="code-editor-field">
+                <span class="field-label">Cuerpo HTML</span>
+                <textarea id="bodyHtmlInput"></textarea>
+                <div id="bodyHtmlEditor" class="monaco-editor-host" aria-hidden="true"></div>
+              </div>
+            </div>
           </form>
 
-          <div class="editor">
+          <div id="previewPanel" class="editor editor-preview">
             <div>
               <h2>Preview</h2>
               <div id="previewWarnings"></div>
@@ -79,7 +88,11 @@
             <label>Texto renderizado
               <div id="previewText" class="preview-box"></div>
             </label>
-            <label>HTML renderizado
+            <div class="preview-html-header">
+              <h2>HTML renderizado</h2>
+              <button type="button" id="htmlPreviewZoomBtn" aria-expanded="false">Maximizar HTML</button>
+            </div>
+            <label class="preview-html-frame">
               <iframe id="previewHtml" class="preview-box" sandbox=""></iframe>
             </label>
           </div>
@@ -106,6 +119,30 @@
           </table>
         </div>
       </section>
+
+      <section id="dynamicValuesTab" class="panel hidden">
+        <div class="toolbar recipients-toolbar">
+          <div class="toolbar">
+            <button id="addDynamicValueBtn" class="primary">Agregar fila</button>
+            <button id="saveDynamicValuesBtn">Guardar dynamic values</button>
+          </div>
+        </div>
+        <div id="dynamicValueMessages"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>dynamic_key</th>
+                <th>value</th>
+                <th>enabled</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="dynamicValuesBody"></tbody>
+          </table>
+        </div>
+      </section>
     </section>
   </main>
 
@@ -127,10 +164,12 @@
     </section>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.49.0/min/vs/loader.min.js"></script>
   <script src="{{ url_for('static', filename='js/api.js') }}"></script>
   <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
   <script src="{{ url_for('static', filename='js/templates-view.js') }}"></script>
   <script src="{{ url_for('static', filename='js/recipients-view.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dynamic-values-view.js') }}"></script>
   <script src="{{ url_for('static', filename='js/preview-view.js') }}"></script>
   <script src="{{ url_for('static', filename='js/mail-actions.js') }}"></script>
   <script src="{{ url_for('static', filename='js/state.js') }}"></script>

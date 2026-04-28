@@ -8,6 +8,22 @@ window.selectedIndexes = function selectedIndexes() {
   return Array.from(document.querySelectorAll(".recipient-selected:checked")).map(input => Number(input.dataset.index));
 };
 
+function selectedSendTargets() {
+  return Array.from(document.querySelectorAll(".recipient-selected:checked")).map(input => {
+    const index = Number(input.dataset.index);
+    const recipient = state.recipients[index] || {};
+    return {
+      index,
+      recipientId: input.dataset.recipientId || "",
+      email: recipient.email || `Fila ${index + 1}`,
+    };
+  });
+}
+
+function wait(milliseconds) {
+  return new Promise(resolve => window.setTimeout(resolve, milliseconds));
+}
+
 window.dryRun = async function dryRun() {
   try {
     const ids = selectedRecipientIds();
@@ -27,22 +43,38 @@ window.dryRun = async function dryRun() {
 };
 
 window.sendSelected = async function sendSelected() {
-  const ids = selectedRecipientIds();
-  const indexes = selectedIndexes();
-  if (!ids.length && !indexes.length) {
+  const targets = selectedSendTargets();
+  if (!targets.length) {
     notify.warning("Selecciona al menos un recipient.");
     return;
   }
-  const confirmation = await confirmSend(ids.length || indexes.length);
+  const confirmation = await confirmSend(targets.length);
   if (confirmation !== "SEND") return;
+  const sendBtn = $("sendBtn");
+  sendBtn.disabled = true;
   try {
-    const data = await api("/api/send", {
-      method: "POST",
-      body: JSON.stringify(ids.length ? { recipient_ids: ids, confirm: confirmation } : { indexes, confirm: confirmation }),
-    });
-    notify.success(`Enviados: ${data.sent}`);
+    for (const [index, target] of targets.entries()) {
+      notify.message(`Enviando ${index + 1}/${targets.length}`, {
+        description: target.email,
+        duration: 12000,
+      });
+      await api("/api/send", {
+        method: "POST",
+        body: JSON.stringify(
+          target.recipientId
+            ? { recipient_ids: [target.recipientId], confirm: confirmation }
+            : { indexes: [target.index], confirm: confirmation }
+        ),
+      });
+      if (index < targets.length - 1) {
+        await wait(10000);
+      }
+    }
+    notify.success(`Enviados: ${targets.length}`);
   } catch (error) {
     notify.error(error.message);
+  } finally {
+    sendBtn.disabled = false;
   }
 };
 

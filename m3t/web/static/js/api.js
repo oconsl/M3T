@@ -3,6 +3,9 @@ window.state = {
   recipients: [],
   recipientColumns: [],
   recipientErrors: [],
+  dynamicValues: [],
+  dynamicErrors: [],
+  dynamicVariables: [],
   selectedTemplateId: null,
   originalTemplateId: "",
 };

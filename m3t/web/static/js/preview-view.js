@@ -4,6 +4,7 @@ window.previewSelected = async function previewSelected() {
   try {
     const recipientIndex = Number($("previewRecipientSelect").value || 0);
     const messageFormat = state.recipients[recipientIndex]?.message_format || "html";
+    const editorValues = getTemplateEditorValues();
     const data = await api("/api/preview", {
       method: "POST",
       body: JSON.stringify({
@@ -11,8 +12,8 @@ window.previewSelected = async function previewSelected() {
         recipient_index: recipientIndex,
         message_format: messageFormat,
         subject: $("subjectInput").value,
-        body_text: $("bodyTextInput").value,
-        body_html: $("bodyHtmlInput").value,
+        body_text: editorValues.body_text,
+        body_html: editorValues.body_html,
       }),
     });
     $("previewSubject").value = data.subject;
@@ -21,6 +22,7 @@ window.previewSelected = async function previewSelected() {
     showMessage("previewWarnings", [
       `Version seleccionada: ${data.message_format}`,
       ...data.missing_variables.map(variable => `Variable sin valor: {${variable}}`),
+      ...data.missing_dynamic_values.map(variable => `Dynamic sin opciones activas: {dynamic.${variable}}`),
     ], "warn");
   } catch (error) {
     showMessage("previewWarnings", error.message.split("\n"), "error");

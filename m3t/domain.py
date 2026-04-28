@@ -39,12 +39,19 @@ class RecipientSet:
 
 
 @dataclass(frozen=True)
+class DynamicValueSet:
+    columns: list[str]
+    rows: list[dict[str, str]]
+
+
+@dataclass(frozen=True)
 class MailPreview:
     subject: str
     body_text: str
     body_html: str
     message_format: str
     missing_variables: list[str]
+    missing_dynamic_values: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -53,4 +60,5 @@ class MailPreview:
             "body_html": self.body_html,
             "message_format": self.message_format,
             "missing_variables": self.missing_variables,
+            "missing_dynamic_values": self.missing_dynamic_values,
         }

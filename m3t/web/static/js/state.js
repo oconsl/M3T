@@ -2,8 +2,9 @@ window.renderAll = function renderAll(variables = []) {
   renderTemplateList();
   renderTemplateForm();
   renderPreviewRecipientSelect();
-  renderVariables(variables);
+  renderVariables(variables, state.dynamicVariables);
   renderRecipients();
+  renderDynamicValues();
 };
 
 window.loadState = async function loadState() {
@@ -12,6 +13,9 @@ window.loadState = async function loadState() {
   state.recipients = data.recipients;
   state.recipientColumns = data.recipient_columns;
   state.recipientErrors = data.recipient_errors;
+  state.dynamicValues = data.dynamic_values || [];
+  state.dynamicErrors = data.dynamic_errors || [];
+  state.dynamicVariables = data.dynamic_variables || [];
   if (!state.selectedTemplateId && state.templates.length) {
     state.selectedTemplateId = state.templates[0].template_id;
   }
@@ -22,6 +26,8 @@ window.loadState = async function loadState() {
 function wireEvents() {
   $("templateForm").addEventListener("submit", saveTemplate);
   $("previewBtn").addEventListener("click", previewSelected);
+  $("htmlPreviewZoomBtn").addEventListener("click", toggleHtmlPreviewZoom);
+  $("formatHtmlBtn").addEventListener("click", formatHtmlEditor);
   $("previewRecipientSelect").addEventListener("change", previewSelected);
   $("refreshBtn").addEventListener("click", loadState);
   $("connectBtn").addEventListener("click", connectGmail);
@@ -34,6 +40,8 @@ function wireEvents() {
   $("addColumnBtn").addEventListener("click", addColumn);
   $("toggleAllRecipientsBtn").addEventListener("click", toggleAllRecipients);
   $("saveRecipientsBtn").addEventListener("click", saveRecipients);
+  $("addDynamicValueBtn").addEventListener("click", addDynamicValue);
+  $("saveDynamicValuesBtn").addEventListener("click", saveDynamicValues);
   $("recipientSearch").addEventListener("input", renderRecipients);
   document.querySelectorAll(".tab").forEach(tab => {
     tab.addEventListener("click", () => {
@@ -41,9 +49,11 @@ function wireEvents() {
       tab.classList.add("active");
       $("templatesTab").classList.toggle("hidden", tab.dataset.tab !== "templates");
       $("recipientsTab").classList.toggle("hidden", tab.dataset.tab !== "recipients");
+      $("dynamicValuesTab").classList.toggle("hidden", tab.dataset.tab !== "dynamicValues");
     });
   });
 }
 
 wireEvents();
+initTemplateEditors();
 loadState().then(previewSelected).catch(error => notify.error(error.message));

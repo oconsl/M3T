@@ -5,7 +5,7 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-from m3t.config import BACKUPS_DIR, MESSAGES_CSV, RECIPIENTS_CSV, TEMPLATES_DIR
+from m3t.config import BACKUPS_DIR, DYNAMIC_VALUES_CSV, MESSAGES_CSV, RECIPIENTS_CSV, TEMPLATES_DIR
 
 
 def merge_columns(base: list[str], discovered: list[str]) -> list[str]:
@@ -50,7 +50,7 @@ def make_backup() -> Path:
         counter += 1
 
     backup_dir.mkdir(parents=True, exist_ok=True)
-    for source in (MESSAGES_CSV, RECIPIENTS_CSV):
+    for source in (MESSAGES_CSV, RECIPIENTS_CSV, DYNAMIC_VALUES_CSV):
         if source.exists():
             shutil.copy2(source, backup_dir / source.name)
     if TEMPLATES_DIR.exists():

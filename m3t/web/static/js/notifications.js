@@ -70,7 +70,7 @@
           sonnerToast = module.default || module.toast || module;
           if (sonnerToast.config) {
             sonnerToast.config({
-              position: "top-right",
+              position: "top-center",
               theme: "light",
               richColors: true,
             });
@@ -83,12 +83,13 @@
 
   function show(type, message, options = {}) {
     const normalized = normalizeMessage(message);
+    const sonnerOptions = { position: "top-center", ...options };
     loadSonner()
       .then((toast) => {
         const trigger = toast[type] || toast;
-        trigger.call(toast, normalized, options);
+        trigger.call(toast, normalized, sonnerOptions);
       })
-      .catch(() => fallback(type, normalized, options));
+      .catch(() => fallback(type, normalized, sonnerOptions));
   }
 
   window.notify = {

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from m3t.domain import MailPreview, Template
-from m3t.services.formatting import extract_variables, format_with_values, normalize_message_format
+from m3t.services.dynamic_values import DynamicValueService
+from m3t.services.formatting import extract_dynamic_variables, extract_variables, normalize_message_format, render_template_text
 from m3t.services.mailer import preview_config
 
 
@@ -29,11 +30,16 @@ class PreviewService:
         message_format = normalize_message_format(payload.get("message_format") or values.get("message_format", ""))
         all_variables = set(extract_variables(subject, body_text, body_html))
         missing = sorted(variable for variable in all_variables if not values.get(variable))
-        rendered_html = format_with_values(body_html, values) if message_format == "html" else ""
+        dynamic_options = DynamicValueService().enabled_options()
+        dynamic_keys = set(extract_dynamic_variables(subject, body_text, body_html))
+        missing_dynamic_values = sorted(key for key in dynamic_keys if not dynamic_options.get(key))
+        dynamic_choices: dict[str, str] = {}
+        rendered_html = render_template_text(body_html, values, dynamic_options, dynamic_choices) if message_format == "html" else ""
         return MailPreview(
-            subject=format_with_values(subject, values),
-            body_text=format_with_values(body_text, values),
+            subject=render_template_text(subject, values, dynamic_options, dynamic_choices),
+            body_text=render_template_text(body_text, values, dynamic_options, dynamic_choices),
             body_html=rendered_html,
             message_format=message_format,
             missing_variables=missing,
+            missing_dynamic_values=missing_dynamic_values,
         )
